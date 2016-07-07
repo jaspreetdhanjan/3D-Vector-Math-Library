@@ -1,4 +1,4 @@
-# Vector-Math-Library
+# Vector Math Library
 
 <h2>Introduction</h2>
 A vector maths library written in Java for 2D or 3D projects. Created by Jaspreet Dhanjan.
