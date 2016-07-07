@@ -1,7 +1,7 @@
 # 3D-Vector-Math-Library
 
 <h1>Introduction</h1>
-A vector maths library for 2D or 3D projects.
+A vector maths library for 2D or 3D projects. Created by Jaspreet Dhanjan.
 
 <h1>Features</h1>
 - 4x4 Matrix type
