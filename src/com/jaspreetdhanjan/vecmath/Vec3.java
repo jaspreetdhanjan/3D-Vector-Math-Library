@@ -132,9 +132,7 @@ public class Vec3 {
 	}
 
 	public Vec3 normalise() {
-		float len = length();
-		if (len > 0) return div(len);
-		else return set(0, 1, 0);
+		return div(length());
 	}
 
 	public float dot(Vec3 r) {

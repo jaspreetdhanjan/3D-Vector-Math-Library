@@ -115,9 +115,7 @@ public class Vec2 {
 	}
 
 	public Vec2 normalise() {
-		float len = length();
-		if (len > 0) return div(len);
-		else return set(0, 1);
+		return div(length());
 	}
 
 	public Vec2 mid(Vec2 r) {
@@ -148,8 +146,8 @@ public class Vec2 {
 		return new Vec2(cos * x, sin * y);
 	}
 
-	public Vec2 cross(Vec2 r) {
-		return set(x * r.y, y * r.x);
+	public float cross(Vec2 s) {
+		return x * s.y - y * s.x;
 	}
 
 	public Vec2 lerpTo(Vec2 p, float t) {
@@ -170,10 +168,6 @@ public class Vec2 {
 
 	public Vec2 reciprocal() {
 		return set(1f / x, 1f / y);
-	}
-
-	public Vec3 toVec3(float z) {
-		return new Vec3(x, y, z);
 	}
 
 	public String toString() {
