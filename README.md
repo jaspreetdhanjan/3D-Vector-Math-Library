@@ -12,5 +12,8 @@ Created by Jaspreet Dhanjan.
 - Well tested
 - No external libraries needed
 
+<h2>Usage</h2>
+<code> testCode() </code>
+
 <h2>License</h2>
 Free to use for anyone.
