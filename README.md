@@ -19,10 +19,10 @@ All operations on instances of the object are designed to modify the attributes 
 ```java
 	Vec3 a = new Vec3(1, 2, 1);
 	Vec3 b = new Vec3(-1, 1, -1);
-	a.add(b);
+	a.add(b); //a = (0, 3, 0)
 ```
 
-The instance of a has now been reassigned to a+b or (0, 3, 0).
+The instance of a has now been reassigned to a+b.
 
 The Vector-Math-Library overrides Java's `clone` method. You can use this to create a "copy" of a vector to store the result of any operations:
 
@@ -32,7 +32,7 @@ The Vector-Math-Library overrides Java's `clone` method. You can use this to cre
 	Vec3 up = forward.clone().cross(right);
 ```
 
-Most operations return the instance of itself – this allows for a fluent interface style by decluttering lines of code:
+Most operations return the instance of itself – this allows for a fluent interface style by chaining up methods:
 
 ```java
 	float playerRotationX = 0.4245f;
