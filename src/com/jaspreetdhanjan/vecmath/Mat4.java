@@ -1,29 +1,54 @@
 package com.jaspreetdhanjan.vecmath;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
+/**
+ * A row-major 4x4 matrix that is represented by 16 single-precision floating numbers.
+ *
+ * @author Jaspreet Dhanjan
+ */
+
 public class Mat4 {
+	private FloatBuffer tmp = createFloatBuffer(16);
+
 	public float m00, m01, m02, m03;
 	public float m10, m11, m12, m13;
 	public float m20, m21, m22, m23;
 	public float m30, m31, m32, m33;
 
+	// Constructors and setters
+
+	/**
+	 * Constructs an identity matrix.
+	 */
 	public Mat4() {
-		setZero();
+		identity();
 	}
 
-	public Mat4(Mat4 otherMatrix) {
-		set(otherMatrix);
-	}
-
+	/**
+	 * Constructs a matrix with given parameters.
+	 */
 	public Mat4(float m00, float m01, float m02, float m03, float m10, float m11, float m12, float m13, float m20, float m21, float m22, float m23, float m30, float m31, float m32, float m33) {
 		set(m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23, m30, m31, m32, m33);
 	}
 
-	public Mat4 set(Mat4 otherMatrix) {
-		return set(otherMatrix.m00, otherMatrix.m01, otherMatrix.m02, otherMatrix.m03, otherMatrix.m10, otherMatrix.m11, otherMatrix.m12, otherMatrix.m13, otherMatrix.m20, otherMatrix.m21, otherMatrix.m22, otherMatrix.m23, otherMatrix.m30, otherMatrix.m31, otherMatrix.m32, otherMatrix.m33);
+	/**
+	 * Constructs a matrix using the attributes of anothing matrix.
+	 * 
+	 * @param otherMatrix
+	 *            the matrix to copy.
+	 */
+	public Mat4(Mat4 otherMatrix) {
+		set(otherMatrix.m00, otherMatrix.m01, otherMatrix.m02, otherMatrix.m03, otherMatrix.m10, otherMatrix.m11, otherMatrix.m12, otherMatrix.m13, otherMatrix.m20, otherMatrix.m21, otherMatrix.m22, otherMatrix.m23, otherMatrix.m30, otherMatrix.m31, otherMatrix.m32, otherMatrix.m33);
 	}
 
+	/**
+	 * Sets the matrix values to the respective arguments.
+	 * 
+	 * @return this matrix.
+	 */
 	public Mat4 set(float m00, float m01, float m02, float m03, float m10, float m11, float m12, float m13, float m20, float m21, float m22, float m23, float m30, float m31, float m32, float m33) {
 		this.m00 = m00;
 		this.m01 = m01;
@@ -44,36 +69,73 @@ public class Mat4 {
 		return this;
 	}
 
+	/**
+	 * Sets the matrix values to the same arguments as the other matrix.
+	 * 
+	 * @param otherMatrix
+	 *            the matrix to copy.
+	 * 
+	 * @return this matrix.
+	 */
+	public Mat4 set(Mat4 otherMatrix) {
+		return set(otherMatrix.m00, otherMatrix.m01, otherMatrix.m02, otherMatrix.m03, otherMatrix.m10, otherMatrix.m11, otherMatrix.m12, otherMatrix.m13, otherMatrix.m20, otherMatrix.m21, otherMatrix.m22, otherMatrix.m23, otherMatrix.m30, otherMatrix.m31, otherMatrix.m32, otherMatrix.m33);
+	}
+
+	/**
+	 * Sets the matrix values to the values of the FloatBuffer.
+	 * 
+	 * @param b
+	 *            the FloatBuffer to copy.
+	 * 
+	 * @return this matrix.
+	 */
 	public Mat4 set(FloatBuffer b) {
 		int pp = 0;
 		return set(b.get(pp++), b.get(pp++), b.get(pp++), b.get(pp++), b.get(pp++), b.get(pp++), b.get(pp++), b.get(pp++), b.get(pp++), b.get(pp++), b.get(pp++), b.get(pp++), b.get(pp++), b.get(pp++), b.get(pp++), b.get(pp++));
 	}
 
+	/**
+	 * Sets the values of the matrix to zero.
+	 * 
+	 * @return this matrix.
+	 */
 	public Mat4 setZero() {
 		return set(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 	}
 
+	/**
+	 * Sets the values of the matrix to an identity matrix.
+	 * 
+	 * @return this matrix.
+	 */
 	public Mat4 identity() {
 		return set(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
 	}
 
-	public Mat4 identity3x3() {
-		m00 = 1f;
-		m01 = 0f;
-		m02 = 0f;
-		m10 = 0f;
-		m11 = 1f;
-		m12 = 0f;
-		m20 = 0f;
-		m21 = 0f;
-		m22 = 1f;
-		return this;
-	}
-
+	/**
+	 * Translates the matrix by the vector r.
+	 * 
+	 * @param r
+	 *            the translation vector.
+	 * 
+	 * @return this matrix.
+	 */
 	public Mat4 translate(Vec3 r) {
 		return translate(r.x, r.y, r.z);
 	}
 
+	/**
+	 * Translates the matrix by the given x, y, z values.
+	 * 
+	 * @param x
+	 *            the x translation coordinate.
+	 * @param y
+	 *            the y translation coordinate.
+	 * @param z
+	 *            the z translation coordinate.
+	 * 
+	 * @return this matrix.
+	 */
 	public Mat4 translate(float x, float y, float z) {
 		m30 += m00 * x + m10 * y + m20 * z;
 		m31 += m01 * x + m11 * y + m21 * z;
@@ -82,27 +144,52 @@ public class Mat4 {
 		return this;
 	}
 
-	public Vec3 translation() {
-		return new Vec3(m30, m31, m32);
-	}
-
-	public Mat4 removeTranslation() {
-		m03 = m13 = m23 = m33 = 0;
-		return this;
-	}
-
+	/**
+	 * Rotates the matrix by a given angle on the x-axis.
+	 * 
+	 * @param angle
+	 *            the angle to rotate by.
+	 * 
+	 * @return this matrix.
+	 */
 	public Mat4 rotX(float angle) {
 		return rotate(angle, Vec3.X);
 	}
 
+	/**
+	 * Rotates the matrix by a given angle on the y-axis.
+	 * 
+	 * @param angle
+	 *            the angle to rotate by.
+	 * 
+	 * @return this matrix.
+	 */
 	public Mat4 rotY(float angle) {
 		return rotate(angle, Vec3.Y);
 	}
 
+	/**
+	 * Rotates the matrix by a given angle on the z-axis.
+	 * 
+	 * @param angle
+	 *            the angle to rotate by.
+	 * 
+	 * @return this matrix.
+	 */
 	public Mat4 rotZ(float angle) {
 		return rotate(angle, Vec3.Z);
 	}
 
+	/**
+	 * Rotates the matrix by a given angle on a given axis.
+	 * 
+	 * @param angle
+	 *            the angle to rotate by.
+	 * @param axis
+	 *            the axis to rotate along.
+	 * 
+	 * @return this matrix.
+	 */
 	public Mat4 rotate(float angle, Vec3 axis) {
 		float sin = (float) Math.sin(angle);
 		float cos = (float) Math.cos(angle);
@@ -153,15 +240,30 @@ public class Mat4 {
 		return this;
 	}
 
-	public Mat4 removeRotation() {
-		m20 = m21 = m22 = m23 = 0;
-		return this;
-	}
-
+	/**
+	 * Scales the matrix by the a vector r.
+	 * 
+	 * @param r
+	 *            the vector to scale.
+	 * 
+	 * @return this matrix.
+	 */
 	public Mat4 scale(Vec3 r) {
 		return scale(r.x, r.y, r.z);
 	}
 
+	/**
+	 * Scales the matrix by the given x, y, z values.
+	 * 
+	 * @param x
+	 *            the x translation coordinate.
+	 * @param y
+	 *            the y translation coordinate.
+	 * @param z
+	 *            the z translation coordinate.
+	 * 
+	 * @return this matrix.
+	 */
 	public Mat4 scale(float x, float y, float z) {
 		m00 *= x;
 		m01 *= x;
@@ -178,14 +280,14 @@ public class Mat4 {
 		return this;
 	}
 
-	public Mat4 add(Vec3 r) {
-		m00 += r.x;
-		m11 += r.y;
-		m22 += r.z;
-		m33++;
-		return this;
-	}
-
+	/**
+	 * Adds a scalar r to the matrix.
+	 * 
+	 * @param r
+	 *            the value to add.
+	 * 
+	 * @return this matrix.
+	 */
 	public Mat4 add(float r) {
 		m00 += r;
 		m11 += r;
@@ -194,6 +296,14 @@ public class Mat4 {
 		return this;
 	}
 
+	/**
+	 * Adds another matrix to this.
+	 * 
+	 * @param r
+	 *            the value to add.
+	 * 
+	 * @return this matrix.
+	 */
 	public Mat4 add(Mat4 r) {
 		m00 += r.m00;
 		m01 += r.m01;
@@ -214,6 +324,14 @@ public class Mat4 {
 		return this;
 	}
 
+	/**
+	 * Multiplies this matrix by a vector r.
+	 * 
+	 * @param r
+	 *            the vector to multiply by.
+	 * 
+	 * @return this matrix.
+	 */
 	public Vec3 mul(Vec3 r) {
 		float x = m00 * r.x + m01 * r.y + m02 * r.z + m03;
 		float y = m10 * r.x + m11 * r.y + m12 * r.z + m13;
@@ -222,10 +340,26 @@ public class Mat4 {
 		return new Vec3(x, y, z);
 	}
 
+	/**
+	 * Multiplies this matrix by a scalar s.
+	 * 
+	 * @param r
+	 *            the value to multiply by.
+	 * 
+	 * @return this matrix.
+	 */
 	public Mat4 mul(float s) {
 		return set(m00 * s, m01 * s, m02 * s, m03 * s, m10 * s, m11 * s, m12 * s, m13 * s, m20 * s, m21 * s, m22 * s, m23 * s, m30 * s, m31 * s, m32 * s, m33 * s);
 	}
 
+	/**
+	 * Multiplies this matrix by another matrix m.
+	 * 
+	 * @param m
+	 *            the value to multiply by.
+	 * 
+	 * @return this matrix.
+	 */
 	public Mat4 mul(Mat4 m) {
 		m00 = m00 * m.m00 + m01 * m.m10 + m02 * m.m20 + m03 * m.m30;
 		m01 = m00 * m.m01 + m01 * m.m11 + m02 * m.m21 + m03 * m.m31;
@@ -249,7 +383,17 @@ public class Mat4 {
 		return this;
 	}
 
-	public Mat4 lerp(Mat4 m, float t) {
+	/**
+	 * Linearly interpolates between this matrix and the given matrix m.
+	 * 
+	 * @param m
+	 *            the other matrix.
+	 * @param t
+	 *            the step size.
+	 * 
+	 * @return this matrix.
+	 */
+	public Mat4 lerpTo(Mat4 m, float t) {
 		m00 *= (1 - t) + m.m00 * t;
 		m01 *= (1 - t) + m.m01 * t;
 		m02 *= (1 - t) + m.m02 * t;
@@ -269,8 +413,22 @@ public class Mat4 {
 		return this;
 	}
 
-	public Mat4 gluPerspective(float fov, float aspect, float near, float far) {
-		setZero();
+	/**
+	 * Creates a perspective matrix.
+	 * 
+	 * @param fov
+	 *            the field-of-view.
+	 * @param aspect
+	 *            the aspect ratio.
+	 * @param near
+	 *            the near clipping plane.
+	 * @param far
+	 *            the far clipping plane.
+	 * 
+	 * @return this matrix.
+	 */
+	public Mat4 createPerspectiveMatrix(float fov, float aspect, float near, float far) {
+		identity();
 
 		float yScale = (float) (1f / Math.tan(Math.toRadians(fov / 2f)));
 		float xScale = yScale / aspect;
@@ -285,8 +443,26 @@ public class Mat4 {
 		return this;
 	}
 
-	public Mat4 gluOrthographic(float left, float right, float bottom, float top, float near, float far) {
-		setZero();
+	/**
+	 * Creates an orthographic matrix.
+	 * 
+	 * @param left
+	 *            the left clipping plane.
+	 * @param right
+	 *            the right clipping plane.
+	 * @param bottom
+	 *            the bottom clipping plane.
+	 * @param top
+	 *            the top clipping plane.
+	 * @param near
+	 *            the near clipping plane.
+	 * @param far
+	 *            the far clipping plane.
+	 * 
+	 * @return this matrix.
+	 */
+	public Mat4 createOrthographicMatrix(float left, float right, float bottom, float top, float near, float far) {
+		identity();
 
 		float xOrth = 2f / (right - left);
 		float yOrth = 2f / (top - bottom);
@@ -306,7 +482,21 @@ public class Mat4 {
 		return this;
 	}
 
-	public Mat4 gluLookAt(Vec3 eye, Vec3 center, Vec3 up) {
+	/**
+	 * Sets the matrix to a look at matrix with a direction and an up vector.
+	 * 
+	 * Multiply this with a translation matrix to get a camera model-view matrix.
+	 * 
+	 * @param eye
+	 *            the position of the camera.
+	 * @param center
+	 *            the center position.
+	 * @param up
+	 *            the up director.
+	 * 
+	 * @return this matrix.
+	 */
+	public Mat4 lookAt(Vec3 eye, Vec3 center, Vec3 up) {
 		identity();
 
 		Vec3 forward = center.clone().sub(eye).normalise();
@@ -325,10 +515,20 @@ public class Mat4 {
 		return this;
 	}
 
+	/**
+	 * Multiplies the matrix by -1.
+	 * 
+	 * @return this matrix.
+	 */
 	public Mat4 negate() {
 		return mul(-1f);
 	}
 
+	/**
+	 * Gets the determinant of this matrix.
+	 * 
+	 * @return the value of the determinant.
+	 */
 	public float getDeterminant() {
 		return m30 * m21 * m12 * m03 - m20 * m31 * m12 * m03 //
 				- m30 * m11 * m22 * m03 + m10 * m31 * m22 * m03 //
@@ -344,6 +544,14 @@ public class Mat4 {
 				- m10 * m01 * m22 * m33 + m00 * m11 * m22 * m33;//
 	}
 
+	/**
+	 * Inverses the matrix.
+	 * 
+	 * @throws a
+	 *             RuntimeException if the matrix is singular (non-invertible).
+	 * 
+	 * @return this matrix.
+	 */
 	public Mat4 inverse() {
 		if (!isInvertible()) throw new RuntimeException("Non-Invertible matrix: " + this);
 
@@ -369,14 +577,15 @@ public class Mat4 {
 		return set(t00, t01, t02, t03, t10, t11, t12, t13, t20, t21, t22, t23, t30, t31, t32, t33).mul(invDeterminant);
 	}
 
-	public boolean isInvertible() {
+	private boolean isInvertible() {
 		return getDeterminant() != 0f;
 	}
 
-	public Mat4 clone() {
-		return new Mat4(m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23, m30, m31, m32, m33);
-	}
-
+	/**
+	 * Transposes the matrix to a column-major matrix.
+	 * 
+	 * @return this matrix.
+	 */
 	public Mat4 transpose() {
 		float t00 = m00, t01 = m01, t02 = m02, t03 = m03;
 		float t10 = m10, t11 = m11, t12 = m12, t13 = m13;
@@ -385,8 +594,38 @@ public class Mat4 {
 		return set(t00, t10, t20, t30, t01, t11, t21, t31, t02, t12, t22, t32, t03, t13, t23, t33);
 	}
 
+	/**
+	 * Gets the reciprocal of this matrix.
+	 * 
+	 * @return this matrix.
+	 */
 	public Mat4 reciprocal() {
 		return set(1f / m00, 1f / m01, 1f / m02, 1f / m03, 1f / m10, 1f / m11, 1f / m12, 1f / m13, 1f / m20, 1f / m21, 1f / m22, 1f / m23, 1f / m30, 1f / m31, 1f / m32, 1f / m33);
+	}
+
+	/**
+	 * Compresses the matrix information into a FloatBuffer, ready for OpenGL usage.
+	 * 
+	 * @return a FloatBuffer copy of this row-major matrix.
+	 */
+	public FloatBuffer export() {
+		tmp.clear();
+		tmp.put(m00).put(m01).put(m02).put(m03).put(m10).put(m11).put(m12).put(m13).put(m20).put(m21).put(m22).put(m23).put(m30).put(m31).put(m32).put(m33);
+		tmp.flip();
+		return tmp;
+	}
+
+	private FloatBuffer createFloatBuffer(int size) {
+		ByteBuffer bb = ByteBuffer.allocateDirect(size << 2);
+		bb.order(ByteOrder.nativeOrder());
+		FloatBuffer fb = bb.asFloatBuffer();
+		return fb;
+	}
+
+	// java.lang.Object overrides
+
+	public Mat4 clone() {
+		return new Mat4(m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23, m30, m31, m32, m33);
 	}
 
 	public String toString() {
@@ -398,6 +637,28 @@ public class Mat4 {
 		return b.toString();
 	}
 
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + Float.floatToIntBits(m00);
+		result = prime * result + Float.floatToIntBits(m01);
+		result = prime * result + Float.floatToIntBits(m02);
+		result = prime * result + Float.floatToIntBits(m03);
+		result = prime * result + Float.floatToIntBits(m10);
+		result = prime * result + Float.floatToIntBits(m11);
+		result = prime * result + Float.floatToIntBits(m12);
+		result = prime * result + Float.floatToIntBits(m13);
+		result = prime * result + Float.floatToIntBits(m20);
+		result = prime * result + Float.floatToIntBits(m21);
+		result = prime * result + Float.floatToIntBits(m22);
+		result = prime * result + Float.floatToIntBits(m23);
+		result = prime * result + Float.floatToIntBits(m30);
+		result = prime * result + Float.floatToIntBits(m31);
+		result = prime * result + Float.floatToIntBits(m32);
+		result = prime * result + Float.floatToIntBits(m33);
+		return result;
+	}
+
 	public boolean equals(Object o) {
 		if (o instanceof Mat4) {
 			Mat4 r = (Mat4) o;
@@ -406,14 +667,5 @@ public class Mat4 {
 			}
 		}
 		return false;
-	}
-
-	public static Mat4 createNormalMatrix(Mat4 modelViewMatrix) {
-		Mat4 normalMatrix = modelViewMatrix.clone();
-		normalMatrix.m30 = 0f;
-		normalMatrix.m31 = 0f;
-		normalMatrix.m32 = 0f;
-		normalMatrix.m33 = 1f;
-		return normalMatrix.inverse().transpose();
 	}
 }
