@@ -13,7 +13,7 @@ Created by Jaspreet Dhanjan.
 - No external libraries needed
 
 <h2>Usage</h2>
-All operations on instances of the object are designed to modify the attributes of the object itself.
+All operations on instances of the object are designed to modify the attributes of the object itself. 
 
 ```
 	Vec3 a = new Vec3(1, 2, 1);
@@ -23,13 +23,13 @@ All operations on instances of the object are designed to modify the attributes 
 
 The instance of Vec3 "a" has now been reassigned to a+b or (0, 3, 0).
 
+The Vector-Math-Library overrides Java's `clone` method. You can use this to create a "copy" of a vector to store the result of any operations:
+
 ```
 	Vec3 forward = new Vec3(0, 0, 1);
 	Vec3 right = new Vec3(1, 0, 0);
 	Vec3 up = forward.clone().cross(right);
 ```
-
-The Vector-Math-Library overrides Java's `clone` method. You can use this to create a "copy" of a vector to store the result of any operations.
 
 Most operations return the instance of itself – this allows for a fluent interface style by decluttering lines of code:
 
