@@ -81,8 +81,9 @@ Within 3 lines of code a model-view matrix has been created ready to send to Ope
 The Matrix API has been inherently designed for OpenGL use:
 
 ```java
-	FloatBuffer matrixBuffer = modelViewMatrix.export();
-	glUniformMatrix4fv(mat4Location, false, matrixBuffer);
+	FloatBuffer tmp = ... // Create your FloatBuffer
+	modelViewMatrix.putInto(tmp);
+	glUniformMatrix4fv(mat4Location, false, tmp);
 ```
 
 <h2>License</h2>
