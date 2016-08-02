@@ -73,7 +73,7 @@ Most operations return the instance of itself – this allows for a fluent inter
 ```java
 	float playerRotationX = 0.4245f;
 	Vec3 playerPosition = new Vec3(2, 0, 5);
-	Mat4 modelViewMatrix = new Mat4().identity().translate(playerPosition).rotX(playerRotationX);
+	Mat4 modelViewMatrix = new Mat4().translate(playerPosition).rotX(playerRotationX);
 ```
 
 Within 3 lines of code a model-view matrix has been created ready to send to OpenGL.
