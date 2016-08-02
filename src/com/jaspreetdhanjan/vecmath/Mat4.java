@@ -549,7 +549,9 @@ public class Mat4 {
 	 * @return this matrix.
 	 */
 	public Mat4 inverse() {
-		if (!isInvertible()) throw new RuntimeException("Non-Invertible matrix: " + this);
+		if (!isInvertible()) {
+			throw new RuntimeException("Non-Invertible matrix: " + this);
+		}
 
 		float determinant = getDeterminant();
 		float invDeterminant = 1f / determinant;
