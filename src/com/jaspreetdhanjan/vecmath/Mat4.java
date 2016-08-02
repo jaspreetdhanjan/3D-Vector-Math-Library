@@ -1,7 +1,5 @@
 package com.jaspreetdhanjan.vecmath;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
 /**
@@ -11,8 +9,6 @@ import java.nio.FloatBuffer;
  */
 
 public class Mat4 {
-	private FloatBuffer tmp = createFloatBuffer(16);
-
 	public float m00, m01, m02, m03;
 	public float m10, m11, m12, m13;
 	public float m20, m21, m22, m23;
@@ -604,22 +600,17 @@ public class Mat4 {
 	}
 
 	/**
-	 * Compresses the matrix information into a FloatBuffer, ready for OpenGL usage.
+	 * Compresses the matrix information into the given FloatBuffer, ready for OpenGL usage.
+	 * 
+	 * @param tmpBuffer
+	 *            the buffer where the matrix will be stored into.
 	 * 
 	 * @return a FloatBuffer copy of this row-major matrix.
 	 */
-	public FloatBuffer export() {
-		tmp.clear();
-		tmp.put(m00).put(m01).put(m02).put(m03).put(m10).put(m11).put(m12).put(m13).put(m20).put(m21).put(m22).put(m23).put(m30).put(m31).put(m32).put(m33);
-		tmp.flip();
-		return tmp;
-	}
-
-	private FloatBuffer createFloatBuffer(int size) {
-		ByteBuffer bb = ByteBuffer.allocateDirect(size << 2);
-		bb.order(ByteOrder.nativeOrder());
-		FloatBuffer fb = bb.asFloatBuffer();
-		return fb;
+	public void putInto(FloatBuffer tmpBuffer) {
+		tmpBuffer.clear();
+		tmpBuffer.put(m00).put(m01).put(m02).put(m03).put(m10).put(m11).put(m12).put(m13).put(m20).put(m21).put(m22).put(m23).put(m30).put(m31).put(m32).put(m33);
+		tmpBuffer.flip();
 	}
 
 	// java.lang.Object overrides
