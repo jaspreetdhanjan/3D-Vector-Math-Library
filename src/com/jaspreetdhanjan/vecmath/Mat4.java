@@ -655,9 +655,11 @@ public class Mat4 {
 	public boolean equals(Object o) {
 		if (o instanceof Mat4) {
 			Mat4 r = (Mat4) o;
-			if (m00 == r.m00 && m01 == r.m01 && m02 == r.m02 && m03 == r.m03 && m10 == r.m10 && m11 == r.m11 && m12 == r.m12 && m13 == r.m13 && m20 == r.m20 && m21 == r.m21 && m22 == r.m22 && m23 == r.m23 && m30 == r.m30 && m31 == r.m31 && m32 == r.m32 && m33 == r.m33) {
-				return true;
-			}
+			if (m00 != r.m00 && m01 != r.m01 && m02 != r.m02 && m03 != r.m03) return false;
+			if (m10 != r.m10 && m11 != r.m11 && m12 != r.m12 && m13 != r.m13) return false;
+			if (m20 != r.m20 && m21 != r.m21 && m22 != r.m22 && m23 != r.m23) return false;
+			if (m30 != r.m30 && m31 != r.m31 && m32 != r.m32 && m33 != r.m33) return false;
+			return true;
 		}
 		return false;
 	}

@@ -19,46 +19,10 @@ All operations on instances of the object are designed to modify the attributes 
 ```java
 	Vec3 a = new Vec3(1, 2, 1);
 	Vec3 b = new Vec3(-1, 1, -1);
-	a.add(b); //a = (0, 3, 0)
-```
-
-The instance of a has now been reassigned to a+b.
-
-The Vector-Math-Library overrides Java's `clone` method. You can use this to create a "copy" of a vector to store the result of any operations:
-
-```java
-	Vec3 forward = new Vec3(0, 0, 1);
-	Vec3 right = new Vec3(1, 0, 0);
-	Vec3 up = forward.clone().cross(right);
-```
-
-Most operations return the instance of itself – this allows for a fluent interface style by chaining up methods:
-
-```java
-	float playerRotationX = 0.4245f;
-	Vec3 playerPosition = new Vec3(2, 0, 5);
-	Mat4 modelViewMatrix = new Mat4().identity().translate(playerPosition).rotX(playerRotationX);
-```
-
-Within 3 lines of code a model-view matrix has been created ready to send to OpenGL.
-
-The Matrix API has been inherently designed for OpenGL use:
-
-```java
-	FloatBuffer matrixBuffer = modelViewMatrix.export();
-	glUniformMatrix4fv(mat4Location, false, matrixBuffer);
-```
-
-<h2>Usage</h2>
-All operations on instances of the object are designed to modify the attributes of the object itself. 
-
-```java
-	Vec3 a = new Vec3(1, 2, 1);
-	Vec3 b = new Vec3(-1, 1, -1);
 	a.add(b);
 ```
 
-The instance of Vec3 "a" has now been reassigned to a+b or (0, 3, 0).
+The instance of Vec3 "a" has now been reassigned to a+b or [0, 3, 0].
 
 The Vector-Math-Library overrides Java's `clone` method. You can use this to create a "copy" of a vector to store the result of any operations:
 
@@ -81,9 +45,9 @@ Within 3 lines of code a model-view matrix has been created ready to send to Ope
 The Matrix API has been inherently designed for OpenGL use:
 
 ```java
-	FloatBuffer tmp = ... // Create your FloatBuffer
-	modelViewMatrix.putInto(tmp);
-	glUniformMatrix4fv(mat4Location, false, tmp);
+	FloatBuffer tmpBuffer = BufferUtils.createFloatBuffer(16);
+	modelViewMatrix.putInto(tmpBuffer);
+	glUniformMatrix4fv(mat4Location, false, tmpBuffer);
 ```
 
 <h2>License</h2>
