@@ -8,7 +8,7 @@ import java.nio.FloatBuffer;
  * @author Jaspreet Dhanjan
  */
 
-public class Mat4 {
+public class Mat4 implements Vecmath<Mat4> {
 	public float m00, m01, m02, m03;
 	public float m10, m11, m12, m13;
 	public float m20, m21, m22, m23;
@@ -88,6 +88,18 @@ public class Mat4 {
 	public Mat4 set(FloatBuffer b) {
 		int pp = 0;
 		return set(b.get(pp++), b.get(pp++), b.get(pp++), b.get(pp++), b.get(pp++), b.get(pp++), b.get(pp++), b.get(pp++), b.get(pp++), b.get(pp++), b.get(pp++), b.get(pp++), b.get(pp++), b.get(pp++), b.get(pp++), b.get(pp++));
+	}
+
+	/**
+	 * Compresses the matrix information into the given FloatBuffer, ready for OpenGL usage.
+	 * 
+	 * @param tmpBuffer
+	 *            the buffer where the matrix will be stored into.
+	 */
+	public void putInto(FloatBuffer tmpBuffer) {
+		tmpBuffer.clear();
+		tmpBuffer.put(m00).put(m01).put(m02).put(m03).put(m10).put(m11).put(m12).put(m13).put(m20).put(m21).put(m22).put(m23).put(m30).put(m31).put(m32).put(m33);
+		tmpBuffer.flip();
 	}
 
 	/**
@@ -599,20 +611,6 @@ public class Mat4 {
 	 */
 	public Mat4 reciprocal() {
 		return set(1f / m00, 1f / m01, 1f / m02, 1f / m03, 1f / m10, 1f / m11, 1f / m12, 1f / m13, 1f / m20, 1f / m21, 1f / m22, 1f / m23, 1f / m30, 1f / m31, 1f / m32, 1f / m33);
-	}
-
-	/**
-	 * Compresses the matrix information into the given FloatBuffer, ready for OpenGL usage.
-	 * 
-	 * @param tmpBuffer
-	 *            the buffer where the matrix will be stored into.
-	 * 
-	 * @return a FloatBuffer copy of this row-major matrix.
-	 */
-	public void putInto(FloatBuffer tmpBuffer) {
-		tmpBuffer.clear();
-		tmpBuffer.put(m00).put(m01).put(m02).put(m03).put(m10).put(m11).put(m12).put(m13).put(m20).put(m21).put(m22).put(m23).put(m30).put(m31).put(m32).put(m33);
-		tmpBuffer.flip();
 	}
 
 	// java.lang.Object overrides

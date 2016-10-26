@@ -1,12 +1,14 @@
 package com.jaspreetdhanjan.vecmath;
 
+import java.nio.FloatBuffer;
+
 /**
  * A 3-element vector that is represented by 3 single-precision floating numbers.
  *
  * @author Jaspreet Dhanjan
  */
 
-public class Vec3 {
+public class Vec3 implements Vecmath<Vec3> {
 	public static final Vec3 X = new Vec3(1f, 0f, 0f);
 	public static final Vec3 Y = new Vec3(0f, 1f, 0f);
 	public static final Vec3 Z = new Vec3(0f, 0f, 1f);
@@ -109,6 +111,31 @@ public class Vec3 {
 		this.y = r.y;
 		this.z = r.z;
 		return this;
+	}
+
+	/**
+	 * Sets the vector values to the values of the FloatBuffer.
+	 * 
+	 * @param b
+	 *            the FloatBuffer to copy.
+	 * 
+	 * @return this vector.
+	 */
+	public Vec3 set(FloatBuffer buffer) {
+		int pp = 0;
+		return set(buffer.get(pp++), buffer.get(pp++), buffer.get(pp++));
+	}
+
+	/**
+	 * Compresses the vector information into the given FloatBuffer, ready for OpenGL usage.
+	 * 
+	 * @param tmpBuffer
+	 *            the buffer where the matrix will be stored into.
+	 */
+	public void putInto(FloatBuffer buffer) {
+		buffer.clear();
+		buffer.put(x).put(y).put(z);
+		buffer.flip();
 	}
 
 	// Addition methods
@@ -387,7 +414,7 @@ public class Vec3 {
 	 * 
 	 * @return the result.
 	 */
-	public float distanceToSqrt(Vec3 r) {
+	public float distanceToSqrd(Vec3 r) {
 		float xd = r.x - x;
 		float yd = r.y - y;
 		float zd = r.z - z;
@@ -493,7 +520,7 @@ public class Vec3 {
 	 * @param v
 	 *            the other vector.
 	 * 
-	 * @return returns a floating point value of the angle in radians. If the vectors are parallel then the method will return 0.
+	 * @return returns a floating point value of the angle, in radians. If the vectors are parallel then the method will return 0.
 	 */
 	public float angle(Vec3 v) {
 		float d = dot(v);

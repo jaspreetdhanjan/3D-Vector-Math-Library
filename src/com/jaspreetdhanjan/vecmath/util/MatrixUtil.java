@@ -1,6 +1,8 @@
-package com.jaspreetdhanjan.vecmath;
+package com.jaspreetdhanjan.vecmath.util;
 
-public class MathUtil {
+import com.jaspreetdhanjan.vecmath.Mat4;
+
+public class MatrixUtil {
 	/**
 	 * Creates a normal matrix from the model-view matrix.
 	 * 
