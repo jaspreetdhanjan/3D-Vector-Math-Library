@@ -338,7 +338,7 @@ public class Mat4 implements Vecmath<Mat4> {
 	 * @param r
 	 *            the vector to multiply by.
 	 * 
-	 * @return this matrix.
+	 * @return a new vector with missing w component.
 	 */
 	public Vec3 mul(Vec3 r) {
 		float x = m00 * r.x + m01 * r.y + m02 * r.z + m03;
